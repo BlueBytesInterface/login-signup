@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<style>
+body {
+  background-image: url('bg1.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  justify-content: center;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  outline: none;
+  transition: all 0.2s;
+}
+
+a:hover,
+a:focus {
+  color: #0b0b0b;
+  transition: all 0.2s;
+}
+
+html {
+  height: 100%;
+}
+
+.login-card {
+  padding: 32px 32px 0;
+  box-sizing: border-box;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  height: 100%;
+  max-height: 740px;
+  max-width: 350px;
+  flex-direction: column;
+}
+
+.login-card-content {
+  flex-grow: 2;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-card-footer {
+  padding: 32px 0;
+}
+
+h2 .highlight {
+  color: #fdc654;
+}
+
+h2 {
+  font-size: 32px;
+  margin: 0;
+}
+
+h3 {
+  color: #000000;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 0;
+}
+
+.header {
+  margin-bottom: 50px;
+}
+
+.logo {
+  border-radius: 40px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 16px;
+  background: rgba(255, 255, 255, 0.1);
+  align-items: center;
+}
+
+button {
+  background: white;
+  display: block;
+  color: #d61e2d;
+  width: 100%;
+  border: none;
+  border-radius: 40px;
+  padding: 12px 0;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 32px;
+  outline: none;
+}
+
+.form-field {
+  margin-bottom: 16px;
+  width: 100%;
+  position: relative;
+}
+
+.form-field .icon {
+  position: absolute;
+  background: white;
+  color: #d61e2d;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+.form-field .icon:after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border: 12px solid transparent;
+  border-left: 12px solid white;
+  position: absolute;
+  top: 8px;
+  right: -20px;
+}
+
+.form-field input {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  width: 100%;
+  border-radius: 16px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-field input::placeholder {
+  color: white;
+}
+
+.form-field input:hover,
+.form-field input:focus {
+  background: white;
+  color: #d61e2d;
+  transition: all 0.2s;
+}
+
+.form-field input:hover::placeholder {
+  color: #d61e2d;
+}
+</style>
+<body>
+<div class="login-card">
+  <div class="login-card-content">
+    <div class="header">
+      <div class="logo">
+        <div><img src="logo111.jpg" style="width:100%; height:90%;"></div>
+      </div>
+      <h2>NOW<span class="highlight">CAST</span></h2>
+      <h3>Update is what we do!</h3>
+    </div>
+    <div class="form">
+        <div class="form-field name">
+        <div class="icon">
+          <i class="far fa-user"></i>
+        </div>
+        <input type="text" placeholder="Name" id="nameInp">
+      </div>
+        <div class="form-field ContactNo">
+        <div class="icon">
+          <i class="far fa-user"></i>
+        </div>
+        <input type="text" placeholder="email" id="emailInp">
+      </div>
+      <div class="form-field username">
+        <div class="icon">
+          <i class="far fa-user"></i>
+        </div>
+        <input type="text" placeholder="Username" id="userInp">
+      </div>
+      <div class="form-field password">
+        <div class="icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <input type="password" placeholder="Password" id="passInp">
+      </div>
+
+      <button type="submit" id="sub_btn">
+        Sign Up
+      </button>
+      <div>
+        <a href="login.html">Already have an account?</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+  import { getAuth , GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.12.1/firebase/auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDEGCrBp30KYe6sXmKL7-50wul_27UMKNo",
+    authDomain: "login-965cb.firebaseapp.com",
+    databaseURL: "https://login-965cb-default-rtdb.firebaseio.com",
+    projectId: "login-965cb",
+    storageBucket: "login-965cb.appspot.com",
+    messagingSenderId: "753616924826",
+    appId: "1:753616924826:web:367e17c6ed8cc2f40d6f23"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider(app);
+  const database = getDatabase(app);
+  import { getDatabase, ref, set, child, get, update, remove }
+      from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+
+  const db = getDatabase();
+
+  const name = getElementById('nameInp');
+  const email = getElementById('emailInp');
+  const username = getElementById('userInp');
+  const password = getElementById('passInp');
+  const submit = getElementById('sub_btn');
+
+
+  function validation(){
+    let nameregex = /^[a-zA-Z\s]+$/;
+    let email = /^[a-zA-Z0-9]+@(gmail|yahoo|outlook)\.com$/;
+    let userregex = /^[a-zA-Z0-9]{5,}$/;
+    if(!nameregex.test(name.value)){
+      alert("The name should only contain alphabets!");
+      return;
+      }
+    if(!email.test(email.value)){
+      alert("Enter a valid email");
+      return;
+      }
+     if(!userregex.test(username.value)){
+      alert("Username can only be alphanumeric. \nUsername atleast 5 character.\nUsername cannot contain space");
+      return false;
+      }
+      return true;
+    }
+
+  function RegisterUser(){
+    if(!validation()){
+      return;
+    };
+    const dbRef = ref(db);
+
+    get(child(dbRef,"UsersList/+username.value")).then((snapshot)=>{
+      if(snapshot.exists()){
+        alert("Account Already exist!");
+        }
+
+      else{
+        set(ref(db,"UsersList/"+username.value),
+        {
+          fullname: name.value,
+          email: email.value,
+          username: username.value,
+          password: pass.value
+        })
+        .then(()=>{
+          alert("User registered successfully");
+        })
+        .catch((error)=>{
+          alert("error"+error);
+        })
+      }
+    });
+  }
+
+  submit.addEventListener('click', RegisterUser);
+</script>
+</body>
+
+
